@@ -18,7 +18,7 @@ public class AppPractica {
 		int opcion;
 		do {
 			mostrarMenu();
-			
+			//
 			opcion = leerEntero("elige una opcion: ");
 			
 			switch (opcion) {
