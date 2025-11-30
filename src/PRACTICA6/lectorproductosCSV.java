@@ -2,7 +2,7 @@ package PRACTICA6;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-public class lectorproductosCSV {
+public class LectorProductosCSV {
 
 	public static void cargarDesdeArchivo(String ruta, ArbolProductos arbol ) {
 		BufferedReader br = null;
@@ -30,11 +30,14 @@ public class lectorproductosCSV {
 	                double costoUnitario = Double.parseDouble(partes[3].trim());
 	                double precioVenta = Double.parseDouble(partes[4].trim());
 	                
-	                Producto p = new Producto(clave, descripcion, inventario, costoUnitario, precioVenta);
-	                
-	                arbol.insertar(p);
+	                try {
+	                	Producto p = new Producto(clave, descripcion, inventario, costoUnitario, precioVenta);
+	                	arbol.insertar(p);
+	                } catch (IllegalArgumentException e) {
+	                	System.out.println(">> Producto inválido en línea: " + linea + " - " + e.getMessage());
+	                }
 				}catch(NumberFormatException e) {
-					System.out.println(">> no se puo convertir la linea " + linea);
+					System.out.println(">> no se pudo convertir la linea " + linea);
 				}
 			}
 			System.out.println(">> Datos cargados desde: " + ruta);
@@ -46,4 +49,18 @@ public class lectorproductosCSV {
 			}
 		}
     }
+	
+	public static void guardarEnArchivo(String ruta, ArbolProductos arbol) {
+		try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(ruta))) {
+			java.util.List<Producto> productos = arbol.obtenerProductosOrdenados();
+			for (Producto p : productos) {
+				pw.println(p.getClave() + "," + p.getDescripcion() + "," + 
+						   p.getInventario() + "," + p.getCostoUnitario() + "," + 
+						   p.getPrecioVenta());
+			}
+			System.out.println(">> Datos guardados exitosamente en: " + ruta);
+		} catch (IOException e) {
+			System.out.println(">> ERROR al guardar el archivo: " + e.getMessage());
+		}
+	}
 }

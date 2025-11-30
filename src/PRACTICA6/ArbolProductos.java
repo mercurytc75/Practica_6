@@ -1,5 +1,8 @@
 package PRACTICA6;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ArbolProductos {
 
 	private NodoProducto raiz;
@@ -8,21 +11,22 @@ public class ArbolProductos {
 		raiz = null;
 	}
 	
-	public void insertar(Producto p) {
-		raiz = insertarRec(raiz, p);
+	public boolean insertar(Producto p) {
+		int[] contador = {0};
+		raiz = insertarRec(raiz, p, contador);
+		return contador[0] == 1;
 	}
 	
-	public NodoProducto insertarRec(NodoProducto actual, Producto p) {
+	public NodoProducto insertarRec(NodoProducto actual, Producto p, int[] contador) {
 		if(actual == null) {
+			contador[0] = 1;
 			return new  NodoProducto(p);
 		}
 		
 		if(p.getClave() < actual.dato.getClave()) {
-			actual.izq = insertarRec(actual.izq, p);
+			actual.izq = insertarRec(actual.izq, p, contador);
 		}else if (p.getClave() > actual.dato.getClave()) {
-			actual.der = insertarRec(actual.der, p);
-		}else {
-			System.out.println(">> la clave " + p.getClave() + "ya existe. No se inserta. " );
+			actual.der = insertarRec(actual.der, p, contador);
 		}
 		return actual;
 	}
@@ -45,43 +49,38 @@ public class ArbolProductos {
 		}
 	}
 
-	public  double vender(int clave, int cantidad) {
+	public ResultadoOperacion vender(int clave, int cantidad) {
 		NodoProducto n = buscarRec(raiz, clave);
 		if(n == null) {
-			System.out.println(">> No existe un producto con clave " + clave);
-			return -1;
+			return new ResultadoOperacion(false, "No existe un producto con clave " + clave);
 		}
 		if(cantidad <= 0) {
-			System.out.println(">> la cantidad dede ser mayor que cero. ");
-			return -1;
+			return new ResultadoOperacion(false, "La cantidad debe ser mayor que cero.");
 		}
 		if(cantidad > n.dato.getInventario()) {
-			System.out.println(">> No hay suficiente inventario. disponible.");
-			return -1;
+			return new ResultadoOperacion(false, "No hay suficiente inventario disponible. Disponible: " + n.dato.getInventario());
 		}
 		
 		int nuevoInventario = n.dato.getInventario() - cantidad;
 		n.dato.setInventario(nuevoInventario);
 		
 		double total = cantidad * n.dato.getPrecioVenta();
-		return total;
+		return new ResultadoOperacion(true, "Venta realizada exitosamente.", n.dato, total);
 	}
 	
-	public boolean comprar(int clave, int cantidad) {
+	public ResultadoOperacion comprar(int clave, int cantidad) {
 		NodoProducto n = buscarRec(raiz, clave);
 		if(n == null) {
-			System.out.println(">> No existe un producto con clave " + clave);
-			return false;
+			return new ResultadoOperacion(false, "No existe un producto con clave " + clave);
 		}
 		
 		if(cantidad <= 0) {
-			System.out.println(">> la cantidad debe ser mayor que cero. ");
-			return false;
+			return new ResultadoOperacion(false, "La cantidad debe ser mayor que cero.");
 		}
 		
 		int nuevoInventario = n.dato.getInventario() + cantidad;
 		n.dato.setInventario(nuevoInventario);
-		return true;
+		return new ResultadoOperacion(true, "Compra registrada exitosamente.", n.dato, 0);
 	}
 	
 	public double calcularInversionTotal() {
@@ -108,6 +107,20 @@ public class ArbolProductos {
 			System.out.println(actual.dato);
 			System.out.println("---------------------");
 			imprimirInOrdenRec(actual.der);
+		}
+	}
+	
+	public List<Producto> obtenerProductosOrdenados() {
+		List<Producto> lista = new ArrayList<>();
+		obtenerProductosOrdenadosRec(raiz, lista);
+		return lista;
+	}
+	
+	private void obtenerProductosOrdenadosRec(NodoProducto actual, List<Producto> lista) {
+		if(actual != null) {
+			obtenerProductosOrdenadosRec(actual.izq, lista);
+			lista.add(actual.dato);
+			obtenerProductosOrdenadosRec(actual.der, lista);
 		}
 	}
 		

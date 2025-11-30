@@ -9,6 +9,16 @@ public class Producto {
 	private double precioVenta;	
 	
 	public Producto(int clave, String descripcion, int inventario, double costoUnitario, double precioVenta) {
+		if (inventario < 0) {
+			throw new IllegalArgumentException("El inventario no puede ser negativo.");
+		}
+		if (costoUnitario < 0) {
+			throw new IllegalArgumentException("El costo unitario no puede ser negativo.");
+		}
+		if (precioVenta <= costoUnitario) {
+			throw new IllegalArgumentException("El precio de venta debe ser mayor al costo unitario.");
+		}
+		
 		this.clave = clave;
 		this.descripcion = descripcion;
 		this.inventario = inventario;
@@ -19,7 +29,32 @@ public class Producto {
 	
 
 	public void setInventario(int inventario) {
+		if (inventario < 0) {
+			throw new IllegalArgumentException("El inventario no puede ser negativo.");
+		}
 		this.inventario = inventario;
+	}
+	
+	public void setCostoUnitario(double costoUnitario) {
+		if (costoUnitario < 0) {
+			throw new IllegalArgumentException("El costo unitario no puede ser negativo.");
+		}
+		this.costoUnitario = costoUnitario;
+	}
+	
+	public void setPrecioVenta(double precioVenta) {
+		if (precioVenta <= this.costoUnitario) {
+			throw new IllegalArgumentException("El precio de venta debe ser mayor al costo unitario.");
+		}
+		this.precioVenta = precioVenta;
+	}
+	
+	public double calcularMargen() {
+		return precioVenta - costoUnitario;
+	}
+	
+	public double calcularPorcentajeMargen() {
+		return ((precioVenta - costoUnitario) / costoUnitario) * 100;
 	}
 
 
