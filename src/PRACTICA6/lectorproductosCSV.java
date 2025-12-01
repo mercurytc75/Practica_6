@@ -53,8 +53,8 @@ public class LectorProductosCSV {
 			java.util.List<Producto> productos = arbol.obtenerProductosOrdenados();
 			for (Producto p : productos) {
 				pw.println(p.getClave() + "," + p.getDescripcion() + "," + 
-						   p.getInventario() + "," + p.getCostoUnitario() + "," + 
-						   p.getPrecioVenta());
+				p.getInventario() + "," + p.getCostoUnitario() + "," + 
+				p.getPrecioVenta());
 			}
 			System.out.println(">> Datos guardados exitosamente en: " + ruta);
 		} catch (IOException e) {
