@@ -44,18 +44,18 @@ public class AppPractica {
 		}while(opcion != 0);
 	}
 
-	 private static void mostrarMenu() {
-	        System.out.println("========== CATÁLOGO DE PRODUCTOS ==========");
-	        System.out.println("1. Agregar nuevo producto");
-	        System.out.println("2. Buscar producto por clave");
-	        System.out.println("3. Realizar venta de producto");
-	        System.out.println("4. Realizar compra (entrada de inventario)");
-	        System.out.println("5. Imprimir inversión total en la empresa");
-	        System.out.println("6. Imprimir todos los productos (in-order)");
-	        System.out.println("7. Guardar cambios en archivo CSV");
-	        System.out.println("0. Salir");
-	        System.out.println("===========================================");
-	 }	
+	private static void mostrarMenu() {
+		System.out.println("========== CATÁLOGO DE PRODUCTOS ==========");
+		System.out.println("1. Agregar nuevo producto");
+		System.out.println("2. Buscar producto por clave");
+		System.out.println("3. Realizar venta de producto");
+		System.out.println("4. Realizar compra (entrada de inventario)");
+		System.out.println("5. Imprimir inversión total en la empresa");
+		System.out.println("6. Imprimir todos los productos (in-order)");
+		System.out.println("7. Guardar cambios en archivo CSV");
+		System.out.println("0. Salir");
+		System.out.println("===========================================");
+	}	
 	
 	
 	private static int leerEntero(String mensaje) {
@@ -92,32 +92,33 @@ public class AppPractica {
 		return x;
 	}
 
-	    private static void agregarNuevoProducto() {
-	        System.out.println("---- Agregar nuevo producto ----");
-	        int clave = leerEntero("Clave (única): ");
-	        
-	        if (arbol.buscar(clave) != null) {
-	            System.out.println(">> Ya existe un producto con la clave " + clave);
-	            return;
-	        }
-	        
-	        System.out.print("Descripción: ");
-	        String descripcion = sc.nextLine();
-	        int inventario = leerEntero("Inventario inicial: ");
-	        double costo = leerDouble("Costo unitario: ");
-	        double precio = leerDouble("Precio de venta: ");
+	private static void agregarNuevoProducto() {
+		System.out.println("---- Agregar nuevo producto ----");
+		int clave = leerEntero("Clave (única): ");
+	
+		if (arbol.buscar(clave) != null) {
+			System.out.println(">> Ya existe un producto con la clave " + clave);
+			return;
+		}
 
-	        try {
-	        	Producto p = new Producto(clave, descripcion, inventario, costo, precio);
-	        	if (arbol.insertar(p)) {
-	        		System.out.println("✓ Producto agregado exitosamente.");
-	        	} else {
-	        		System.out.println(">> No se pudo agregar el producto.");
-	        	}
-	        } catch (IllegalArgumentException e) {
-	        	System.out.println(">> " + e.getMessage());
-	        }
-	    }	private static void buscarProducto() {
+		System.out.print("Descripción: ");
+		String descripcion = sc.nextLine();
+		int inventario = leerEntero("Inventario inicial: ");
+		double costo = leerDouble("Costo unitario: ");
+		double precio = leerDouble("Precio de venta: ");
+
+		try {
+			Producto p = new Producto(clave, descripcion, inventario, costo, precio);
+			if (arbol.insertar(p)) {
+				System.out.println("✓ Producto agregado exitosamente.");
+			} else {
+				System.out.println(">> No se pudo agregar el producto.");
+			}
+		} catch (IllegalArgumentException e) {
+			System.out.println(">> " + e.getMessage());
+		}
+	}	
+	private static void buscarProducto() {
 		System.out.println("---- Buscar producto ----");
 		int clave = leerEntero("Clave del producto: ");
 		Producto p = arbol.buscar(clave);
@@ -129,32 +130,36 @@ public class AppPractica {
 		}
 	}
 
-	    private static void realizarVenta() {
-	        System.out.println("---- Venta de producto ----");
-	        int clave = leerEntero("Clave del producto: ");
-	        int cantidad = leerEntero("Cantidad a vender: ");
+	private static void realizarVenta() {
+		System.out.println("---- Venta de producto ----");
+		int clave = leerEntero("Clave del producto: ");
+		int cantidad = leerEntero("Cantidad a vender: ");
 
-	        ResultadoOperacion resultado = arbol.vender(clave, cantidad);
-	        if (resultado.exito) {
-	            System.out.println("✓ " + resultado.mensaje);
-	            System.out.println("Total a pagar: " + formatoMoneda.format(resultado.valor));
-	            System.out.println("Inventario restante: " + resultado.producto.getInventario());
-	        } else {
-	            System.out.println(">> " + resultado.mensaje);
-	        }
-	    }	    private static void realizarCompra() {
-	        System.out.println("---- Compra de producto ----");
-	        int clave = leerEntero("Clave del producto: ");
-	        int cantidad = leerEntero("Cantidad a comprar: ");
+		ResultadoOperacion resultado = arbol.vender(clave, cantidad);
+		if (resultado.exito) {
+			System.out.println("✓ " + resultado.mensaje);
+			System.out.println("Total a pagar: " + formatoMoneda.format(resultado.valor));
+			System.out.println("Inventario restante: " + resultado.producto.getInventario());
+		} else {
+			System.out.println(">> " + resultado.mensaje);
+		}
+	}
 
-	        ResultadoOperacion resultado = arbol.comprar(clave, cantidad);
-	        if (resultado.exito) {
-	            System.out.println("✓ " + resultado.mensaje);
-	            System.out.println("Nuevo inventario: " + resultado.producto.getInventario());
-	        } else {
-	            System.out.println(">> " + resultado.mensaje);
-	        }
-	    }	private static void imprimirInversion() {
+	private static void realizarCompra() {
+		System.out.println("---- Compra de producto ----");
+		int clave = leerEntero("Clave del producto: ");
+		int cantidad = leerEntero("Cantidad a comprar: ");
+
+		ResultadoOperacion resultado = arbol.comprar(clave, cantidad);
+		if (resultado.exito) {
+			System.out.println("✓ " + resultado.mensaje);
+			System.out.println("Nuevo inventario: " + resultado.producto.getInventario());
+		} else {
+			System.out.println(">> " + resultado.mensaje);
+		}
+	}
+
+	private static void imprimirInversion() {
 		System.out.println("---- Inversión total ----");
 		double inv = arbol.calcularInversionTotal();
         System.out.println("La inversión total en la empresa es: " + formatoMoneda.format(inv));

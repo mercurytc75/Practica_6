@@ -23,19 +23,17 @@ public class LectorProductosCSV {
 				}
 				
 				try {
-					
 					int clave = Integer.parseInt(partes[0].trim());
-	                String descripcion = partes[1].trim();
-	            	int inventario = Integer.parseInt(partes[2].trim());
-	                double costoUnitario = Double.parseDouble(partes[3].trim());
-	                double precioVenta = Double.parseDouble(partes[4].trim());
-	                
-	                try {
-	                	Producto p = new Producto(clave, descripcion, inventario, costoUnitario, precioVenta);
-	                	arbol.insertar(p);
-	                } catch (IllegalArgumentException e) {
-	                	System.out.println(">> Producto inválido en línea: " + linea + " - " + e.getMessage());
-	                }
+					String descripcion = partes[1].trim();
+					int inventario = Integer.parseInt(partes[2].trim());
+					double costoUnitario = Double.parseDouble(partes[3].trim());
+					double precioVenta = Double.parseDouble(partes[4].trim());
+					try {
+						Producto p = new Producto(clave, descripcion, inventario, costoUnitario, precioVenta);
+						arbol.insertar(p);
+					} catch (IllegalArgumentException e) {
+						System.out.println(">> Producto inválido en línea: " + linea + " - " + e.getMessage());
+					}
 				}catch(NumberFormatException e) {
 					System.out.println(">> no se pudo convertir la linea " + linea);
 				}
