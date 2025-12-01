@@ -9,6 +9,7 @@ public class ResultadoOperacion {
 	public ResultadoOperacion(boolean exito, String mensaje) {
 		this.exito = exito;
 		this.mensaje = mensaje;
+        
 	}
 	
 	public ResultadoOperacion(boolean exito, String mensaje, Producto producto, double valor) {

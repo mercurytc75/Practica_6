@@ -23,19 +23,17 @@ public class LectorProductosCSV {
 				}
 				
 				try {
-					
 					int clave = Integer.parseInt(partes[0].trim());
-	                String descripcion = partes[1].trim();
-	            	int inventario = Integer.parseInt(partes[2].trim());
-	                double costoUnitario = Double.parseDouble(partes[3].trim());
-	                double precioVenta = Double.parseDouble(partes[4].trim());
-	                
-	                try {
-	                	Producto p = new Producto(clave, descripcion, inventario, costoUnitario, precioVenta);
-	                	arbol.insertar(p);
-	                } catch (IllegalArgumentException e) {
-	                	System.out.println(">> Producto inválido en línea: " + linea + " - " + e.getMessage());
-	                }
+					String descripcion = partes[1].trim();
+					int inventario = Integer.parseInt(partes[2].trim());
+					double costoUnitario = Double.parseDouble(partes[3].trim());
+					double precioVenta = Double.parseDouble(partes[4].trim());
+					try {
+						Producto p = new Producto(clave, descripcion, inventario, costoUnitario, precioVenta);
+						arbol.insertar(p);
+					} catch (IllegalArgumentException e) {
+						System.out.println(">> Producto inválido en línea: " + linea + " - " + e.getMessage());
+					}
 				}catch(NumberFormatException e) {
 					System.out.println(">> no se pudo convertir la linea " + linea);
 				}
@@ -55,8 +53,8 @@ public class LectorProductosCSV {
 			java.util.List<Producto> productos = arbol.obtenerProductosOrdenados();
 			for (Producto p : productos) {
 				pw.println(p.getClave() + "," + p.getDescripcion() + "," + 
-						   p.getInventario() + "," + p.getCostoUnitario() + "," + 
-						   p.getPrecioVenta());
+				p.getInventario() + "," + p.getCostoUnitario() + "," + 
+				p.getPrecioVenta());
 			}
 			System.out.println(">> Datos guardados exitosamente en: " + ruta);
 		} catch (IOException e) {
